@@ -88,7 +88,7 @@
     color: var(--c-ink);
     font-family: var(--f-body);
     -webkit-font-smoothing: antialiased;
-    min-width: 1280px;
+    min-width: 320px;
     overflow-x: hidden;
   }
   a { text-decoration: none; color: inherit; }
@@ -669,6 +669,9 @@
   .repute-bar-fill--blue { background: #c0d5ff; }
   .repute-chart.animate .repute-bar-fill { width: 100%; }
 
+  /* Mobile-only feature images (hidden on desktop) */
+  .feat-img--mobile { display: none; }
+
   /* ── Scroll-reveal ────────────────────────────────────────── */
   .reveal {
     opacity: 0;
@@ -814,6 +817,173 @@
   }
   .footer-social a:hover { opacity: 0.7; }
   .footer-social svg { width: 18px; height: 18px; fill: currentColor; display: block; }
+
+  /* ═══════════════════════════════════════════════════════
+     HAMBURGER / MOBILE NAV
+  ═══════════════════════════════════════════════════════ */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+    margin-left: auto;
+    background: none;
+    border: none;
+  }
+  .nav-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: transform 0.25s, opacity 0.25s;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 44px;
+    left: 0;
+    right: 0;
+    background: #111;
+    z-index: 199;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    overflow-y: auto;
+    max-height: calc(100vh - 44px);
+  }
+  .nav-mobile-menu.open { display: block; }
+  .nav-mobile-menu ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    padding: 8px 0;
+  }
+  .nav-mobile-menu ul a {
+    display: block;
+    padding: 13px 24px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 400;
+    text-decoration: none;
+    transition: background 0.12s;
+  }
+  .nav-mobile-menu ul a:hover { background: rgba(255,255,255,0.08); }
+
+  /* ═══════════════════════════════════════════════════════
+     BREAKPOINT: ≤1100px  (tablets / small laptops)
+  ═══════════════════════════════════════════════════════ */
+  @media (max-width: 1100px) {
+    .container { padding-inline: 40px; }
+
+    /* Nav */
+    .nav-links   { display: none; }
+    .nav-hamburger { display: flex; }
+
+    /* Hero h1 */
+    .hero-h1 { font-size: 38px; line-height: 46px; }
+
+    /* Hero video — fluid, 16:9 */
+    .hero-video-outer { width: 100%; }
+    .hero-video {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+    }
+
+    /* Beyond — stack columns */
+    .beyond-inner {
+      grid-template-columns: 1fr;
+      padding-inline: 40px;
+    }
+    .beyond-screenshot {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 12px;
+      margin-top: 32px;
+    }
+
+    /* CTA */
+    .cta-sec { padding: 60px 40px; }
+
+    /* Footer */
+    .footer-top { padding: 40px 40px; flex-wrap: wrap; gap: 40px; }
+    .footer-bot { padding: 20px 40px; }
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     BREAKPOINT: ≤768px  (mobile)
+  ═══════════════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    :root { --section-gap: 64px; }
+
+    .container { padding-inline: 20px; }
+
+    /* Hero */
+    .hero { padding-top: 36px; }
+    .hero-logo img { width: 200px; }
+    .hero-h1 { font-size: 26px; line-height: 34px; margin-bottom: 24px; }
+    .btn-row { flex-direction: column; align-items: stretch; margin-bottom: 40px; }
+    .btn { width: 100%; justify-content: center; }
+
+    /* Intro */
+    .intro-copy { font-size: 18px; line-height: 26px; }
+
+    /* Features — single column, auto heights */
+    .features-grid { grid-template-columns: 1fr; }
+    .feat-card--tall,
+    .feat-card--short { height: auto; }
+    .feat-img-wrap { height: 220px; flex: none; }
+
+    /* Beyond */
+    .beyond-inner { padding-inline: 20px; }
+    .beyond-h2 { font-size: 28px; }
+
+    /* Logos — 2 columns */
+    .logos-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px 0;
+    }
+    .logos-h { font-size: 28px; }
+    .logos-sub { font-size: 16px; margin-bottom: 36px; }
+
+    /* FAQ */
+    .faq-h { font-size: 28px; line-height: 36px; }
+
+    /* CTA */
+    .cta-sec { padding: 48px 20px; }
+    .cta-h { font-size: 28px; line-height: 36px; }
+    .cta-p { font-size: 16px; }
+
+    /* Footer */
+    .footer-top {
+      padding: 32px 20px;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .footer-bot {
+      padding: 16px 20px;
+      flex-direction: column;
+      gap: 12px;
+      text-align: center;
+    }
+
+    /* Pillar gauge — scale down */
+    .pillar-gauge-wrap { width: 150px; height: 150px; }
+    .pillar-gauge-svg  { width: 150px; height: 150px; }
+    .pillar-score-num  { font-size: 40px; }
+
+    /* Show mobile static images; hide animated charts */
+    .feat-img--mobile { display: block !important; }
+    .pillar-chart .pillar-labels,
+    .pillar-chart .pillar-gauge-wrap,
+    .pillar-chart .pillar-svg-wrap { display: none; }
+    .repute-chart { display: none; }
+  }
   </style>
 </head>
 <body>
@@ -860,8 +1030,27 @@
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
       </a>
     </div>
+    <!-- Hamburger — visible on mobile only -->
+    <button class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="navMobileMenu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+
+<!-- Mobile nav drawer -->
+<nav id="navMobileMenu" class="nav-mobile-menu" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">News</a></li>
+    <li><a href="#">Rankings</a></li>
+    <li><a href="#">Business</a></li>
+    <li><a href="#">Jobs</a></li>
+    <li><a href="#">Students</a></li>
+    <li><a href="#">Events</a></li>
+    <li><a href="#">Campus</a></li>
+    <li><a href="#">Solutions</a></li>
+  </ul>
+</nav>
 
 <main>
 
@@ -974,6 +1163,7 @@
         <!-- Pillar / Ranking drivers -->
         <article class="feat-card feat-card--tall reveal" style="transition-delay:0ms">
           <div class="feat-img-wrap" aria-hidden="true">
+            <img class="feat-img feat-img--mobile" src="images/mobile-features-pillar.png" alt="">
             <div class="pillar-chart" id="pillarChart">
               <!-- Labels -->
               <div class="pillar-labels">
@@ -1041,7 +1231,10 @@
         <!-- Strategy / Strategic impact -->
         <article class="feat-card feat-card--tall reveal" style="transition-delay:100ms">
           <div class="feat-img-wrap" aria-hidden="true">
-            <img class="feat-img" src="images/features-strategy.png" alt="">
+            <picture>
+              <source srcset="images/mobile-features-strategy.png" media="(max-width: 768px)">
+              <img class="feat-img" src="images/features-strategy.png" alt="">
+            </picture>
           </div>
           <div class="feat-text">
             <h3 class="feat-title">Focus on strategic impact</h3>
@@ -1057,7 +1250,10 @@
         <!-- Compare -->
         <article class="feat-card feat-card--short reveal" style="transition-delay:0ms">
           <div class="feat-img-wrap" aria-hidden="true">
-            <img class="feat-img" src="images/features-compare.png" alt="">
+            <picture>
+              <source srcset="images/mobile-features-compare.png" media="(max-width: 768px)">
+              <img class="feat-img" src="images/features-compare.png" alt="">
+            </picture>
           </div>
           <div class="feat-text">
             <h3 class="feat-title">Compare against institutions that matter</h3>
@@ -1072,13 +1268,17 @@
             <p class="feat-body">Move beyond the overall result with a subject-by-subject view of performance. Spot areas of strength, identify weaker subject groups and understand where improvement efforts could have the greatest return.</p>
           </div>
           <div class="feat-img-wrap" aria-hidden="true">
-            <img class="feat-img" src="images/features-subjects.png" alt="">
+            <picture>
+              <source srcset="images/mobile-features-subjects.png" media="(max-width: 768px)">
+              <img class="feat-img" src="images/features-subjects.png" alt="">
+            </picture>
           </div>
         </article>
 
         <!-- Reputation -->
         <article class="feat-card feat-card--short reveal" style="transition-delay:200ms">
           <div class="feat-img-wrap" aria-hidden="true">
+            <img class="feat-img feat-img--mobile" src="images/mobile-features-reputation.png" alt="">
             <div class="repute-chart" id="reputeChart">
               <div class="repute-rows">
                 <!-- UK — gradient bar 310px -->
@@ -1372,6 +1572,28 @@
 </footer>
 
 <script>
+  /* ── Hamburger nav toggle ── */
+  (function () {
+    const btn  = document.getElementById('navHamburger');
+    const menu = document.getElementById('navMobileMenu');
+    if (!btn || !menu) return;
+    btn.addEventListener('click', function () {
+      const isOpen = menu.classList.toggle('open');
+      btn.classList.toggle('open', isOpen);
+      btn.setAttribute('aria-expanded', String(isOpen));
+      btn.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    });
+    // Close when a link is tapped
+    menu.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        menu.classList.remove('open');
+        btn.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.setAttribute('aria-label', 'Open menu');
+      });
+    });
+  })();
+
   /* ── Splash screen ── */
   (function () {
     const splashEl = document.getElementById('splash');

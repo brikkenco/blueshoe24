@@ -1,6 +1,6 @@
-# blueshoe24 — Landing Page
+# THE Insights — Landing Page
 
-A desktop landing page concept for blueshoe24, built as a single-file HTML/CSS/JS prototype.
+A desktop landing page concept for [Times Higher Education Insights](https://www.timeshighereducation.com/), built as a single-file HTML/CSS/JS prototype.
 
 ## Features
 
