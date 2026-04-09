@@ -669,8 +669,35 @@
   .repute-bar-fill--blue { background: #c0d5ff; }
   .repute-chart.animate .repute-bar-fill { width: 100%; }
 
+  /* ── Sign-in button ───────────────────────────────── */
+  .btn-signin {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    background: rgba(71, 108, 255, 0.1);
+    color: var(--c-primary);
+    border-radius: 8px;
+    font-family: var(--f-body);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: -0.011em;
+    white-space: nowrap;
+    text-decoration: none;
+    font-feature-settings: 'ss11' 1, 'calt' 0, 'liga' 0;
+    transition: background 0.15s;
+  }
+  .btn-signin:hover { background: rgba(71, 108, 255, 0.16); }
+
   /* Mobile-only feature images (hidden on desktop) */
   .feat-img--mobile { display: none; }
+
+  /* Subscribe button label toggling */
+  .btn-label-short { display: none; }
 
   /* ── Scroll-reveal ────────────────────────────────────────── */
   .reveal {
@@ -926,9 +953,41 @@
     /* Hero */
     .hero { padding-top: 36px; }
     .hero-logo img { width: 200px; }
-    .hero-h1 { font-size: 26px; line-height: 34px; margin-bottom: 24px; }
-    .btn-row { flex-direction: column; align-items: stretch; margin-bottom: 40px; }
-    .btn { width: 100%; justify-content: center; }
+    .hero-h1 { font-size: 24px; line-height: 32px; margin-bottom: 20px; }
+    /* Buttons — side by side, auto-width, Figma spec: 6px padding, 8px radius */
+    .btn-row { flex-direction: row; align-items: center; margin-bottom: 32px; }
+    .btn { flex: 1; justify-content: center; padding: 6px 10px; border-radius: 8px; }
+    /* Show short label, hide long label */
+    .btn-label-full { display: none; }
+    .btn-label-short { display: inline; }
+
+    /* Sign-in button — not shown on mobile */
+    .btn-signin { display: none; }
+
+    /* Gradient — blobs repositioned around video panel, bleed off sides */
+    .hero-video-outer { overflow: visible; padding-top: 12px; }
+    .hero-video-outer::before { display: none; }
+    /* Blob 1 (red) — right side */
+    .hero-glow-1 { width: 197px; height: 208px; right: -40px; left: auto; top: -6px; }
+    /* Blob 2 (magenta) — left side */
+    .hero-glow-2 { width: 197px; height: 208px; left: -40px; right: auto; top: 12px; }
+    /* Blob 3 (blue) — centre */
+    .hero-glow-3 { width: 197px; height: 208px; left: 50%; transform: translateX(-50%); top: 28px; }
+
+    /* Video panel — restore Figma card: red border, 9px radius, subtle shadow */
+    .hero-video {
+      border: 0.72px solid #fe4537;
+      border-radius: 9px;
+      background: #000;
+      box-shadow:
+        0px 22px 6px rgba(105,68,223,0),
+        0px 14px 5px rgba(105,68,223,0.01),
+        0px 8px 5px rgba(105,68,223,0.03),
+        0px 4px 4px rgba(105,68,223,0.04),
+        0px 1px 2px rgba(105,68,223,0.05);
+    }
+    .hero-video-ring { display: none; } /* replaced by direct border above */
+    .hero-video-bg { display: block; }  /* restore soft white interior */
 
     /* Intro */
     .intro-copy { font-size: 18px; line-height: 26px; }
@@ -1058,6 +1117,7 @@
      HERO
 ══════════════════════════════════════════════════════════════ -->
 <section class="hero" aria-labelledby="hero-heading">
+  <a href="#" class="btn-signin">Sign in to THE Insights</a>
   <div class="container">
 
     <!-- THE Insights / World University Rankings logo lockup -->
@@ -1075,7 +1135,7 @@
     <!-- CTA buttons — Figma: outline left, solid right -->
     <div class="btn-row hero-enter">
       <a href="#cta" class="btn btn-outline">Arrange a demo</a>
-      <a href="#"    class="btn btn-solid">Subscribe to THE Insights</a>
+      <a href="#" class="btn btn-solid"><span class="btn-label-full">Subscribe to THE Insights</span><span class="btn-label-short">Subscribe</span></a>
     </div>
 
   </div>
@@ -1143,7 +1203,7 @@
       </p>
       <div class="btn-row" style="margin-bottom:0;">
         <a href="#cta" class="btn btn-outline">Arrange a demo</a>
-        <a href="#"    class="btn btn-solid">Subscribe to THE Insights</a>
+        <a href="#" class="btn btn-solid"><span class="btn-label-full">Subscribe to THE Insights</span><span class="btn-label-short">Subscribe</span></a>
       </div>
     </div>
   </div>
