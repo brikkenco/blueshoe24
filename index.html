@@ -51,27 +51,7 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
-  /* ── Splash screen ─────────────────────────────────────────── */
-  #splash {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  #splash.fade-out {
-    opacity: 0;
-    pointer-events: none;
-  }
-  #splash-lottie {
-    width: 40px;
-    height: 40px;
-  }
-
-  /* Hero elements start hidden; revealed after splash */
+  /* Hero elements start hidden; revealed on page load */
   .hero-enter {
     opacity: 0;
     transform: translateY(28px);
@@ -298,7 +278,7 @@
   ═══════════════════════════════════════════════════════ */
   .hero-video-outer {
     position: relative;
-    width: var(--content-w);
+    width: min(var(--content-w), 100%);
     margin-inline: auto;
     /* Extra vertical space for glow blobs to breathe */
     padding-top: 40px;
@@ -341,8 +321,9 @@
   .hero-video {
     position: relative;
     z-index: 1;
-    width: var(--content-w);
-    height: 612px;
+    width: min(var(--content-w), 100%);
+    height: auto;
+    aspect-ratio: 16 / 9;
     background: #000;
     border-radius: 25.782px;
     overflow: hidden;
@@ -527,16 +508,16 @@
   /* Image area — fills remaining height above the text */
   .feat-img-wrap {
     flex: 1;
-    overflow: hidden;
     min-height: 0;
   }
   .feat-img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top center;
+    height: auto;
     display: block;
   }
+
+  /* Subjects card — text on top, image below on desktop */
+  .feat-card--text-first { flex-direction: column-reverse; }
 
   /* Text area — pinned to bottom of each card */
   .feat-text {
@@ -669,32 +650,11 @@
   .repute-bar-fill--blue { background: #c0d5ff; }
   .repute-chart.animate .repute-bar-fill { width: 100%; }
 
-  /* ── Sign-in button ───────────────────────────────── */
-  .btn-signin {
-    position: absolute;
-    top: 40px;
-    right: 40px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 12px;
-    background: rgba(71, 108, 255, 0.1);
-    color: var(--c-primary);
-    border-radius: 8px;
-    font-family: var(--f-body);
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 24px;
-    letter-spacing: -0.011em;
-    white-space: nowrap;
-    text-decoration: none;
-    font-feature-settings: 'ss11' 1, 'calt' 0, 'liga' 0;
-    transition: background 0.15s;
-  }
-  .btn-signin:hover { background: rgba(71, 108, 255, 0.16); }
 
-  /* Mobile-only feature images (hidden on desktop) */
-  .feat-img--mobile { display: none; }
+  /* Responsive feature images — show the right image per breakpoint */
+  .feat-img--mobile  { display: none; }
+  .feat-img--tablet  { display: none; }
+  .feat-img--desktop { display: block; }
 
   /* Subscribe button label toggling */
   .btn-label-short { display: none; }
@@ -921,6 +881,16 @@
       height: auto;
       aspect-ratio: 16 / 9;
     }
+    .hero-video-logo { width: 260px; }
+
+    /* Consistent vertical padding across all sections at tablet */
+    .intro    { padding-block: 64px; }
+    .features { padding-block: 64px; }
+    .beyond   { padding-block: 64px; }
+    .beyond-left { padding-top: 0; }
+    .logos    { padding-block: 64px; }
+    .faq      { padding-block: 64px; }
+    .cta-sec  { padding-block: 64px; }
 
     /* Beyond — stack columns */
     .beyond-inner {
@@ -934,8 +904,23 @@
       margin-top: 32px;
     }
 
+    /* Features — tablet: single column, horizontal cards (image left, text right) */
+    .features-grid { grid-template-columns: 1fr; }
+    .feat-col { gap: 24px; }
+    .feat-card--tall,
+    .feat-card--short { height: auto; flex-direction: row; align-items: center; overflow: hidden; }
+    .feat-img-wrap { width: 48%; flex: none; height: auto; padding: 16px 0 16px 16px; }
+    .feat-img--tablet { display: block; width: 100%; height: auto; object-fit: unset; }
+    /* Hide desktop animated charts; show tablet static images */
+    .pillar-chart { display: none; }
+    .repute-chart { display: none; }
+    .feat-img--mobile  { display: none !important; }
+    .feat-img--desktop { display: none !important; }
+    /* Text area fills remaining width, vertically centred */
+    .feat-text { flex: 1; min-width: 0; justify-content: center; padding: 28px 28px 28px 32px; }
+
     /* CTA */
-    .cta-sec { padding: 60px 40px; }
+    .cta-sec { padding-inline: 40px; }
 
     /* Footer */
     .footer-top { padding: 40px 40px; flex-wrap: wrap; gap: 40px; }
@@ -946,25 +931,36 @@
      BREAKPOINT: ≤768px  (mobile)
   ═══════════════════════════════════════════════════════ */
   @media (max-width: 768px) {
-    :root { --section-gap: 64px; }
+    :root { --section-gap: 48px; }
 
     .container { padding-inline: 20px; }
 
+    /* Consistent vertical padding across all sections */
+    .intro    { padding-block: 48px; }
+    .features { padding-block: 48px; }
+    .beyond   { padding-block: 48px; }
+    .logos    { padding-block: 48px; }
+    .faq      { padding-block: 48px; }
+    .cta-sec  { padding-block: 48px; }
+
     /* Hero */
-    .hero { padding-top: 36px; }
-    .hero-logo img { width: 200px; }
-    .hero-h1 { font-size: 24px; line-height: 32px; margin-bottom: 20px; }
-    /* Buttons — side by side, auto-width, Figma spec: 6px padding, 8px radius */
-    .btn-row { flex-direction: row; align-items: center; margin-bottom: 32px; }
+    /* Hero — remove top padding; logo/sign-in handle their own spacing */
+    .hero { padding-top: 0; }
+    /* Logo — centred */
+    .hero-logo { justify-content: center; margin-top: 20px; margin-bottom: 16px; }
+    .hero-logo img { width: 195px; }
+    /* Heading — centred */
+    .hero-h1 { font-size: 24px; line-height: 32px; margin-bottom: 20px; text-align: center; }
+    /* Buttons — full width row, equal flex */
+    .btn-row { flex-direction: row; align-items: center; margin-bottom: 32px; width: 100%; }
     .btn { flex: 1; justify-content: center; padding: 6px 10px; border-radius: 8px; }
     /* Show short label, hide long label */
     .btn-label-full { display: none; }
     .btn-label-short { display: inline; }
 
-    /* Sign-in button — not shown on mobile */
-    .btn-signin { display: none; }
+    .hero-video-logo { width: 160px; }
 
-    /* Gradient — blobs repositioned around video panel, bleed off sides */
+/* Gradient — blobs repositioned around video panel, bleed off sides */
     .hero-video-outer { overflow: visible; padding-top: 12px; }
     .hero-video-outer::before { display: none; }
     /* Blob 1 (red) — right side */
@@ -1000,6 +996,7 @@
 
     /* Beyond */
     .beyond-inner { padding-inline: 20px; }
+    .beyond-left { padding-top: 0; }
     .beyond-h2 { font-size: 28px; }
 
     /* Logos — 2 columns */
@@ -1036,21 +1033,37 @@
     .pillar-gauge-svg  { width: 150px; height: 150px; }
     .pillar-score-num  { font-size: 40px; }
 
-    /* Show mobile static images; hide animated charts */
-    .feat-img--mobile { display: block !important; }
+    /* Show mobile static images; hide tablet + animated charts */
+    .feat-img--mobile  { display: block !important; }
+    .feat-img--tablet  { display: none !important; }
+    .feat-img--desktop { display: none !important; }
     .pillar-chart .pillar-labels,
     .pillar-chart .pillar-gauge-wrap,
     .pillar-chart .pillar-svg-wrap { display: none; }
     .repute-chart { display: none; }
+    /* Mobile feature cards — dynamic height, full image + full text */
+    .feat-card--tall,
+    .feat-card--short { flex-direction: column; height: auto; overflow: visible; }
+    /* Override text-first so subjects card matches other cards on mobile */
+    .feat-card--text-first { flex-direction: column; }
+    /* Image at natural size, no cropping */
+    .feat-img-wrap { flex: none; width: 100%; height: auto; }
+    .feat-img--mobile { width: 100%; height: auto; display: block; object-fit: unset; }
+    .feat-text {
+      flex-shrink: 0;
+      padding: 20px 19px 28px;
+      justify-content: flex-start;
+      gap: 8px;
+    }
+    .feat-title { font-size: 18px; line-height: 1.4; }
+    .feat-body  { font-size: 14px; line-height: 20px; letter-spacing: -0.04em; }
+
+    /* Beyond — hide screenshot on mobile */
+    .beyond-screenshot { display: none; }
   }
   </style>
 </head>
 <body>
-
-<!-- Splash screen -->
-<div id="splash">
-  <div id="splash-lottie"></div>
-</div>
 
 <!-- ══════════════════════════════════════════════════════════════
      NAV — THE Higher Education masthead, dark
@@ -1117,7 +1130,6 @@
      HERO
 ══════════════════════════════════════════════════════════════ -->
 <section class="hero" aria-labelledby="hero-heading">
-  <a href="#" class="btn-signin">Sign in to THE Insights</a>
   <div class="container">
 
     <!-- THE Insights / World University Rankings logo lockup -->
@@ -1128,7 +1140,7 @@
     <!-- H1 — Inter Display Bold 48/56, exact gradient on "deep-dive analysis" and "like you." -->
     <h1 class="hero-h1 hero-enter" id="hero-heading">
       Get <span class="grad-text">deep-dive analysis</span> of your rankings
-      performance, in a way that is built for<br>
+      performance, in a way that is built for
       university leaders <span class="grad-text">like you.</span>
     </h1>
 
@@ -1199,7 +1211,7 @@
         Designed specifically for senior leaders, THE Insights equips executives with
         the clarity to truly understand institutional performance, anticipate competitor
         moves, and take decisive action to
-        <strong>secure and accelerate<br>your university's trajectory up the rankings.</strong>
+        <strong>secure and accelerate your university's trajectory up the rankings.</strong>
       </p>
       <div class="btn-row" style="margin-bottom:0;">
         <a href="#cta" class="btn btn-outline">Arrange a demo</a>
@@ -1224,6 +1236,7 @@
         <article class="feat-card feat-card--tall reveal" style="transition-delay:0ms">
           <div class="feat-img-wrap" aria-hidden="true">
             <img class="feat-img feat-img--mobile" src="images/mobile-features-pillar.png" alt="">
+            <img class="feat-img feat-img--tablet" src="images/tablet-features-pillar.png" alt="">
             <div class="pillar-chart" id="pillarChart">
               <!-- Labels -->
               <div class="pillar-labels">
@@ -1291,10 +1304,9 @@
         <!-- Strategy / Strategic impact -->
         <article class="feat-card feat-card--tall reveal" style="transition-delay:100ms">
           <div class="feat-img-wrap" aria-hidden="true">
-            <picture>
-              <source srcset="images/mobile-features-strategy.png" media="(max-width: 768px)">
-              <img class="feat-img" src="images/features-strategy.png" alt="">
-            </picture>
+            <img class="feat-img feat-img--mobile" src="images/mobile-features-strategy.png" alt="">
+            <img class="feat-img feat-img--tablet" src="images/tablet-features-strategy.png" alt="">
+            <img class="feat-img feat-img--desktop" src="images/features-strategy.png" alt="">
           </div>
           <div class="feat-text">
             <h3 class="feat-title">Focus on strategic impact</h3>
@@ -1310,10 +1322,9 @@
         <!-- Compare -->
         <article class="feat-card feat-card--short reveal" style="transition-delay:0ms">
           <div class="feat-img-wrap" aria-hidden="true">
-            <picture>
-              <source srcset="images/mobile-features-compare.png" media="(max-width: 768px)">
-              <img class="feat-img" src="images/features-compare.png" alt="">
-            </picture>
+            <img class="feat-img feat-img--mobile" src="images/mobile-features-compare.png" alt="">
+            <img class="feat-img feat-img--tablet" src="images/tablet-features-compare.png" alt="">
+            <img class="feat-img feat-img--desktop" src="images/features-compare.png" alt="">
           </div>
           <div class="feat-text">
             <h3 class="feat-title">Compare against institutions that matter</h3>
@@ -1322,16 +1333,15 @@
         </article>
 
         <!-- Subjects -->
-        <article class="feat-card feat-card--short reveal" style="transition-delay:100ms">
+        <article class="feat-card feat-card--short feat-card--text-first reveal" style="transition-delay:100ms">
+          <div class="feat-img-wrap" aria-hidden="true">
+            <img class="feat-img feat-img--mobile" src="images/mobile-features-subjects.png" alt="">
+            <img class="feat-img feat-img--tablet" src="images/tablet-features-subjects.png" alt="">
+            <img class="feat-img feat-img--desktop" src="images/features-subjects.png" alt="">
+          </div>
           <div class="feat-text">
             <h3 class="feat-title">Explore subject-level performance</h3>
             <p class="feat-body">Move beyond the overall result with a subject-by-subject view of performance. Spot areas of strength, identify weaker subject groups and understand where improvement efforts could have the greatest return.</p>
-          </div>
-          <div class="feat-img-wrap" aria-hidden="true">
-            <picture>
-              <source srcset="images/mobile-features-subjects.png" media="(max-width: 768px)">
-              <img class="feat-img" src="images/features-subjects.png" alt="">
-            </picture>
           </div>
         </article>
 
@@ -1339,6 +1349,7 @@
         <article class="feat-card feat-card--short reveal" style="transition-delay:200ms">
           <div class="feat-img-wrap" aria-hidden="true">
             <img class="feat-img feat-img--mobile" src="images/mobile-features-reputation.png" alt="">
+            <img class="feat-img feat-img--tablet" src="images/tablet-features-reputation.png" alt="">
             <div class="repute-chart" id="reputeChart">
               <div class="repute-rows">
                 <!-- UK — gradient bar 310px -->
@@ -1654,40 +1665,10 @@
     });
   })();
 
-  /* ── Splash screen ── */
-  (function () {
-    const splashEl = document.getElementById('splash');
-    const lottieEl = document.getElementById('splash-lottie');
-    let dismissed  = false;
-
-    function dismiss() {
-      if (dismissed) return;
-      dismissed = true;
-      splashEl.classList.add('fade-out');
-      // Stagger hero elements in as splash fades out
-      var heroEls = document.querySelectorAll('.hero-enter');
-      heroEls.forEach(function (el, i) {
-        setTimeout(function () { el.classList.add('hero-visible'); }, 150 + i * 120);
-      });
-      setTimeout(function () { splashEl.style.display = 'none'; }, 560);
-    }
-
-    if (typeof lottie === 'undefined') {
-      // Library failed to load — just dismiss immediately
-      dismiss();
-    } else {
-      const anim = lottie.loadAnimation({
-        container: lottieEl,
-        renderer:  'svg',
-        loop:      false,
-        autoplay:  true,
-        path:      'THE-Logo3.json'
-      });
-
-      anim.addEventListener('complete', dismiss);
-      setTimeout(dismiss, 6000); // hard fallback
-    }
-  })();
+  /* ── Hero fade-in on load ── */
+  document.querySelectorAll('.hero-enter').forEach(function (el, i) {
+    setTimeout(function () { el.classList.add('hero-visible'); }, i * 120);
+  });
 
   /* ── FAQ accordion ── */
   document.querySelectorAll(".faq-q").forEach(btn => {
